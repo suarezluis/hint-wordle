@@ -200,7 +200,7 @@ function App() {
           <Suggestion>
             {possibleWords.length > 0 && (
               <>
-                You could try the word{" "}
+                You could try{" "}
                 <SuggestedWord>
                   {getRandomWordFromPossibleWords()
                     .split("")
