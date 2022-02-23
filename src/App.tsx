@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components/macro";
 
 import "./App.css";
 import Header from "./Components/Header";
+import HelpModal from "./Components/HelpModal";
 import Keyboard from "./Components/Keyboard";
 import Word from "./Components/Word";
 import validWords from "./Resources/validWords";
@@ -15,6 +16,7 @@ export enum LetterStatus {
 }
 
 function App() {
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(true);
   const [board, setBoard] = useState([
     [
       ["", LetterStatus.empty],
@@ -189,10 +191,24 @@ function App() {
     return randomWord.toUpperCase();
   };
 
+  const toggleHelpModal = () => {
+    setIsHelpModalOpen(!isHelpModalOpen);
+    localStorage.setItem("isHelpSeenBefore", "true");
+  };
+
+  useEffect(() => {
+    const isHelpSeenBefore = localStorage.getItem("isHelpSeenBefore");
+    console.log(isHelpSeenBefore);
+    if (isHelpSeenBefore) {
+      setIsHelpModalOpen(false);
+    }
+  }, []);
+
   return (
     <div className="App">
       <Wrapper tabIndex={0} onKeyDown={handleKeyPress}>
-        <Header />
+        {isHelpModalOpen && <HelpModal toggleModal={toggleHelpModal} />}
+        <Header toggleHelpModal={toggleHelpModal} />
         <Content>
           <PossibleWrods>
             There is {possibleWords.length} possible words. <br />
